@@ -1,0 +1,259 @@
+<ui version="4.0" >
+ <class>RSyncOptionsWidget</class>
+ <widget class="QWidget" name="RSyncOptionsWidget" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>478</width>
+    <height>446</height>
+   </rect>
+  </property>
+  <layout class="QGridLayout" name="gridLayout_2" >
+   <property name="margin" >
+    <number>0</number>
+   </property>
+   <item row="0" column="0" >
+    <widget class="QGroupBox" name="GroupBox1" >
+     <property name="title" >
+      <string>General Options</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout" >
+      <item row="0" column="0" >
+       <widget class="QCheckBox" name="archive" >
+        <property name="toolTip" >
+         <string>Archive mode (--archive)
+Activates: Recursive, copy syymlinks as symlinks, preservce permissions/owner/group/device files.</string>
+        </property>
+        <property name="text" >
+         <string>Archive mode</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1" >
+       <widget class="QCheckBox" name="keepPartial" >
+        <property name="toolTip" >
+         <string>Keep partially transferred files (--partial)</string>
+        </property>
+        <property name="text" >
+         <string>Keep partially transferred file</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0" >
+       <widget class="QCheckBox" name="recursive" >
+        <property name="toolTip" >
+         <string>Recurse into folders (--recursive)</string>
+        </property>
+        <property name="text" >
+         <string>Recursive</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1" >
+       <widget class="QCheckBox" name="onlyUpdate" >
+        <property name="toolTip" >
+         <string>Skip creating new files on receiver (--existing)</string>
+        </property>
+        <property name="text" >
+         <string>Only update existing files</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0" >
+       <widget class="QCheckBox" name="useCompression" >
+        <property name="toolTip" >
+         <string>Compress file data during the transfer (--compress)</string>
+        </property>
+        <property name="text" >
+         <string>Compression</string>
+        </property>
+        <property name="shortcut" >
+         <string>Alt+O</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1" >
+       <widget class="QCheckBox" name="skipFilesOnSizeMatch" >
+        <property name="toolTip" >
+         <string>Skip files that match in size (--size-only)</string>
+        </property>
+        <property name="text" >
+         <string>Size only</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0" >
+       <widget class="QCheckBox" name="ignoreExisting" >
+        <property name="toolTip" >
+         <string>Skip updating files that exist on receiver (--ignore-existing)</string>
+        </property>
+        <property name="text" >
+         <string>Ignore existing</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1" >
+       <widget class="QCheckBox" name="skipReceiverNewerFiles" >
+        <property name="toolTip" >
+         <string>Skip files that are newer on the receiver (--update)</string>
+        </property>
+        <property name="text" >
+         <string>Skip newer</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="0" >
+       <widget class="QCheckBox" name="checksum" >
+        <property name="toolTip" >
+         <string>Skip based on checksum, not modification time and size (--checksum)</string>
+        </property>
+        <property name="text" >
+         <string>Always Checksum</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="1" >
+       <widget class="QCheckBox" name="windowsCompatability" >
+        <property name="toolTip" >
+         <string>Windows compatibility (--modify-window=1)</string>
+        </property>
+        <property name="text" >
+         <string>Windows compatibility</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="1" column="0" colspan="2" >
+    <widget class="QGroupBox" name="GroupBox2" >
+     <property name="title" >
+      <string>Filesystem and Preservation Options</string>
+     </property>
+     <layout class="QGridLayout" >
+      <property name="margin" >
+       <number>11</number>
+      </property>
+      <property name="spacing" >
+       <number>6</number>
+      </property>
+      <item row="0" column="0" >
+       <widget class="QCheckBox" name="deleteExtraFilesOnReceiver" >
+        <property name="toolTip" >
+         <string>Delete extraneous files from destination folder (--delete)</string>
+        </property>
+        <property name="text" >
+         <string>Delete non-existing files</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1" >
+      <widget class="QCheckBox" name="dontLeaveFileSystem" >
+       <property name="toolTip" >
+        <string>Don't cross filesystem boundaries (--one-file-system)</string>
+       </property>
+       <property name="text" >
+        <string>Don't leave filesystem</string>
+       </property>
+      </widget>
+     </item>
+      <item row="1" column="0" >
+       <widget class="QCheckBox" name="preservePermissions" >
+        <property name="toolTip" >
+         <string>Preserve permissions (--perms)</string>
+        </property>
+        <property name="text" >
+         <string>Preserve Permissions</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1" >
+       <widget class="QCheckBox" name="preserveSpecialFiles" >
+        <property name="toolTip" >
+         <string>Preserve device files and preserve special files (-D)</string>
+        </property>
+        <property name="text" >
+         <string>Preserve Device and special files</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0" >
+       <widget class="QCheckBox" name="preserveOwner" >
+        <property name="toolTip" >
+         <string>Preserve owner (--owner)</string>
+        </property>
+        <property name="text" >
+         <string>Preserve Owners</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1" >
+       <widget class="QCheckBox" name="preserveGroup" >
+        <property name="toolTip" >
+         <string>Preserve group (--group)</string>
+        </property>
+        <property name="text" >
+         <string>Preserve Groups</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0" >
+       <widget class="QCheckBox" name="modificationTimes" >
+        <property name="toolTip" >
+         <string>Preserve modification times (--times)</string>
+        </property>
+        <property name="text" >
+         <string>Preserve Times</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1" >
+       <widget class="QCheckBox" name="copySymlinksAsSymlinks" >
+        <property name="toolTip" >
+         <string>Copy symlinks as symlinks (--links)</string>
+        </property>
+        <property name="text" >
+         <string>Copy symlinks as symlinks</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="2" column="0" colspan="2" >
+    <widget class="QGroupBox" name="groupBox5" >
+     <property name="title" >
+      <string>Custom Options</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout" >
+      <item>
+       <widget class="QLineEdit" name="customOptions" />
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="3" column="1" >
+    <spacer name="verticalSpacer" >
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0" >
+      <size>
+       <width>20</width>
+       <height>191</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+  </layout>
+  <zorder>GroupBox1</zorder>
+  <zorder>GroupBox2</zorder>
+  <zorder>groupBox5</zorder>
+  <zorder>customOptions</zorder>
+ </widget>
+ <layoutdefault spacing="6" margin="11" />
+ <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
+ <resources/>
+ <connections/>
+</ui>

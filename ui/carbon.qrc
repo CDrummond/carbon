@@ -1,0 +1,14 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource>
+<file alias="carbon.svg">../icons/carbon.svg</file>
+<file alias="carbon16.png">../icons/carbon16.png</file>
+<file alias="carbon22.png">../icons/carbon22.png</file>
+<file alias="carbon32.png">../icons/carbon32.png</file>
+<file alias="carbon48.png">../icons/carbon48.png</file>
+<file alias="carbon-root.svg">../icons/carbon-root.svg</file> 
+<file alias="carbon-root16.png">../icons/carbon-root16.png</file>
+<file alias="carbon-root22.png">../icons/carbon-root22.png</file>
+<file alias="carbon-root32.png">../icons/carbon-root32.png</file>
+<file alias="carbon-root48.png">../icons/carbon-root48.png</file>
+</qresource>
+</RCC>

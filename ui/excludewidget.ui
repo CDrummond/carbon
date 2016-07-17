@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ExcludeWidget</class>
+ <widget class="QWidget" name="ExcludeWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>384</width>
+    <height>219</height>
+   </rect>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <item row="0" column="0" rowspan="3" colspan="2">
+    <widget class="TreeWidget" name="excludeList">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <column>
+      <property name="text">
+       <string>Pattern</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Comment</string>
+      </property>
+     </column>
+    </widget>
+   </item>
+   <item row="0" column="2">
+    <widget class="QPushButton" name="addButton">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="2">
+    <widget class="QPushButton" name="removeButton">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="2">
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>154</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="3" column="0" colspan="3">
+    <widget class="QCheckBox" name="cvsExclude">
+     <property name="toolTip">
+      <string>Exclude files which would be ignored by &lt;i&gt;CVS&lt;/i&gt;. This includes the following list of patterns:&lt;br/&gt;&lt;br/&gt;
+RCS SCCS CVS CVS.adm RCSLOG cvslog.* tags TAGS .make.state .nse_depinfo *~ #* .#* ,* _$* *$ *.old  *.bak  *.BAK *.orig *.rej .del-* *.a *.olb *.o *.obj *.so *.exe *.Z *.elc *.ln core .svn/&lt;br/&gt;&lt;br/&gt;
+(--cvs-exclude)</string>
+     </property>
+     <property name="text">
+      <string>CVS exclude</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0" colspan="3">
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+    <property name="margin">
+     <number>0</number>
+    </property>
+    <item>
+     <widget class="QLabel" name="sizeLabel" >
+      <property name="text" >
+       <string>Exclude files larger than:</string>
+      </property>
+     </widget>
+    </item>
+    <item >
+     <widget class="QSpinBox" name="maxSize" >
+      <property name="sizePolicy" >
+       <sizepolicy vsizetype="Preferred" hsizetype="Minimum" >
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="suffix" >
+       <string> M</string>
+      </property>
+      <property name="minimum" >
+       <number>0</number>
+      </property>
+      <property name="maximum" >
+       <number>65535</number>
+      </property>
+      <property name="singleStep" >
+       <number>100</number>
+      </property>
+      <property name="specialValueText">
+       <string>No Limit</string>
+      </property>
+     </widget>
+    </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+ <customwidgets>
+  <customwidget>
+   <class>TreeWidget</class>
+   <extends>QTreeWidget</extends>
+   <header>treewidget.h</header>
+  </customwidget>
+ </customwidgets>
+</ui>

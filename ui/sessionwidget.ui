@@ -1,0 +1,54 @@
+<ui version="4.0" >
+ <class>SessionWidget</class>
+ <widget class="QWidget" name="SessionWidget" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>617</width>
+    <height>403</height>
+   </rect>
+  </property>
+  <layout class="QGridLayout" >
+   <property name="margin" >
+    <number>0</number>
+   </property>
+   <item rowspan="2" row="0" column="0" >
+    <widget class="TreeWidget" name="sessions" >
+     <property name="selectionMode" >
+      <enum>QAbstractItemView::ExtendedSelection</enum>
+     </property>
+     <column>
+      <property name="text" >
+       <string>Session</string>
+      </property>
+     </column>
+     <column>
+      <property name="text" >
+       <string>Type</string>
+      </property>
+     </column>
+     <column>
+      <property name="text" >
+       <string>Last Sync</string>
+      </property>
+     </column>
+     <column>
+      <property name="text" >
+       <string>Schedule</string>
+      </property>
+     </column>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>TreeWidget</class>
+   <extends>QTreeWidget</extends>
+   <header>treewidget.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

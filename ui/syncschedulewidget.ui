@@ -1,0 +1,57 @@
+<ui version="4.0" >
+ <class>SyncScheduleWidget</class>
+ <widget class="QWidget" name="SyncScheduleWidget" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>385</width>
+    <height>151</height>
+   </rect>
+  </property>
+  <layout class="QGridLayout" name="gridLayout" >
+   <property name="margin" >
+    <number>0</number>
+   </property>
+   <item row="0" column="0" >
+    <widget class="QLabel" name="label" >
+     <property name="text" >
+      <string>Schedule:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1" >
+    <widget class="QComboBox" name="scheduleType" >
+     <property name="sizePolicy" >
+      <sizepolicy vsizetype="Fixed" hsizetype="MinimumExpanding" >
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0" colspan="2" >
+    <widget class="QGroupBox" name="cronOptions" >
+     <property name="title" >
+      <string>Details:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1" >
+    <spacer name="verticalSpacer" >
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0" >
+      <size>
+       <width>20</width>
+       <height>76</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

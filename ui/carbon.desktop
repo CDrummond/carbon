@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=Carbon
+Comment=Folder Synchronisation
+Exec=carbon
+Icon=carbon
+Type=Application
+Terminal=false
+X-KDE-StartupNotify=true
+X-DBUS-StartupType=Unique
+Categories=Qt;System;
+Keywords=Sync; Synchronisation; Backup; rsync

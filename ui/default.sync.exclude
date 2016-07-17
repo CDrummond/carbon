@@ -1,0 +1,52 @@
+# KDE3 Desktop-Communications-Protocol file
+.DCOPserver*
+# Thumnbail cache
+.thumbnails/
+# CD Database cache
+.cddb/
+# Cross-desktop cache
+.cache/
+# Fonts cache
+.fontconfig/
+# GConf Daemon
+.gconfd/
+# GStreamer files
+.gstreamer*
+# ICE authority file
+.ICEauthority
+# KDE cache
+.kde*/share/cache/
+# KDE3 MCOP folder
+.mcop/
+# KDE3 MCOP resource file
+.mcoprc
+# Firefox cache
+.mozilla/firefox/**/Cache
+# Pulse Audio
+.pulse/
+# Pulse Audio cookie
+.pulse-cookie
+# X11 errors file
+.xsession-errors*
+# X11 authority file
+.Xauthority
+# Desktop-BUS files
+.dbus/
+# DVD-CSS
+.dvdcss/
+# Java
+.java/
+# Macromodia Flash 
+.macromedia/
+# Adobe Flash
+.adobe/
+.gvfs/
+[Cc]ache*
+[Tt]rash*
+*.backup*
+.dropbox*
+/proc/*
+/sys/*
+/dev/*
+/run/*"
+Ubuntu One/

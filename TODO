@@ -1,0 +1,39 @@
+Advanced:
+  Compress file data --compress
+  Don't map uid/gid values --numeric-ids
+  Copy hardlinks as hardlinks --hard-links
+  Protect remote args --protect-args
+              ? is this require, as script quotes args?
+
+Extra:
+  Execute command before rsync: [......] Halt on failure [x]
+  Execute command afger rsync: [.....] On rsync error only [x]
+  Run as root (use pkexec to call carbon-runner)
+  -- will also need to use pkexec to call carbon-terminate
+  -- need to set owner of lock, log, and info files.
+    -- perhaps pass --owner=UID --group=GID to carbon-runner ?
+       script then needs to create lock, log, info first,
+       and then set ownership. This way if crash we are safe!
+
+* SessionDialog
+  Add NOTES detailing URLs
+  Add help text to most pages
+  Always select 'Don't delete old increments' if dest is remote.
+  Dont allow advanced scheduling if run-as-root
+  If run-as-root, then cron scripts need to *not* call su
+
+  Add Adanced settings page:
+    Before sync:
+    Run: [...................] [F]
+    Terminate on failure [x]
+
+    After sync:
+    Run on success: [...............] [F]
+    Run on failure: [...............] [F]
+
+    Run session with admin privaleges
+
+* Use form-layout, and BuddyLabel's, for al UI???
+
+* Dont create backup folder if there are no changes.
+
