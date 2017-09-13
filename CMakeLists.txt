@@ -45,6 +45,13 @@ if (Qt5DBus_FOUND)
     set(QTINCLUDES ${QTINCLUDES} ${Qt5DBus_INCLUDE_DIRS})
     add_definitions(${Qt5DBus_DEFINITIONS})
 endif (Qt5DBus_FOUND)
+set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}")
+set(CMAKE_CXX_STANDARD 11)
+if (Qt5_POSITION_INDEPENDENT_CODE)
+    set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+else ()
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS}")
+endif ()
 
 configure_file(config.h.cmake ${CMAKE_BINARY_DIR}/config.h)
 

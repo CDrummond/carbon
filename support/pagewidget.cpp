@@ -97,7 +97,7 @@ public:
             cg = QPalette::Inactive;
         }
 
-        QStyleOptionViewItemV4 opt(option);
+        QStyleOptionViewItem opt(option);
         opt.showDecorationSelected = true;
         QStyle *style = opt.widget ? opt.widget->style() : QApplication::style();
 

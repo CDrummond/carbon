@@ -72,20 +72,20 @@ void BasicItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opt
 
 
     if (4 == option.version) {
-        const QStyleOptionViewItemV4 &v4 = (QStyleOptionViewItemV4 &)option;
+        const QStyleOptionViewItem &v4 = (QStyleOptionViewItem &)option;
 
         switch (v4.viewItemPosition) {
-        case QStyleOptionViewItemV4::Beginning:
+        case QStyleOptionViewItem::Beginning:
             drawLine(painter, option.rect, col, true, false);
             break;
-        case QStyleOptionViewItemV4::Middle:
+        case QStyleOptionViewItem::Middle:
             drawLine(painter, option.rect, col, false, false);
             break;
-        case QStyleOptionViewItemV4::End:
+        case QStyleOptionViewItem::End:
             drawLine(painter, option.rect, col, false, true);
             break;
-        case QStyleOptionViewItemV4::Invalid:
-        case QStyleOptionViewItemV4::OnlyOne:
+        case QStyleOptionViewItem::Invalid:
+        case QStyleOptionViewItem::OnlyOne:
             drawLine(painter, option.rect, col, true, true);
         }
     } else {

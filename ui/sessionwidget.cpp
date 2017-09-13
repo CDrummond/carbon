@@ -384,7 +384,7 @@ void SessionWidget::controlSyncButtons() {
 }
 
 void SessionWidget::loadSessions() {
-    QFileInfoList sessionList = QDir(Utils::dataDir(QString(), true)).entryInfoList(QStringList() << "*"CARBON_EXTENSION, QDir::NoDotAndDotDot | QDir::Files);
+    QFileInfoList sessionList = QDir(Utils::dataDir(QString(), true)).entryInfoList(QStringList() << "*" CARBON_EXTENSION, QDir::NoDotAndDotDot | QDir::Files);
     QMap<QString, CTTask *> taskMap;
     QList<CTTask *> tasks(ctHost->findCurrentUserCron()->tasks());
     int pos;
