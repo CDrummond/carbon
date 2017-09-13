@@ -54,6 +54,3 @@ install(TARGETS carbon RUNTIME DESTINATION bin LIBRARY DESTINATION lib ARCHIVE D
 set(XDG_APPS_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/share/applications")
 install(FILES carbon.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
 install(FILES default.sync default.sync.exclude DESTINATION ${CMAKE_INSTALL_PREFIX}/share/${CMAKE_PROJECT_NAME})
-
-configure_file (carbon-root.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/carbon-root.desktop @ONLY)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/carbon-root.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})

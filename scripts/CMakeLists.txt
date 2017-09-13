@@ -1,7 +1,4 @@
 configure_file (carbon-runner.cmake ${CMAKE_CURRENT_BINARY_DIR}/carbon-runner @ONLY)
-configure_file (org.craigd.pkexec.carbon.policy.cmake ${CMAKE_CURRENT_BINARY_DIR}/org.craigd.pkexec.carbon.policy @ONLY)
-
-install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/carbon-runner ${CMAKE_CURRENT_BINARY_DIR}/carbon-pkexec DESTINATION ${CMAKE_INSTALL_PREFIX}/share/${CMAKE_PROJECT_NAME}/scripts)
 
 set (CARBON_ANACRON_PERIOD "daily")
 configure_file (carbon-anacron.cmake ${CMAKE_CURRENT_BINARY_DIR}/carbon-daily @ONLY)
@@ -12,4 +9,3 @@ configure_file (carbon-anacron.cmake ${CMAKE_CURRENT_BINARY_DIR}/carbon-monthly 
 install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/carbon-daily DESTINATION /etc/cron.daily RENAME carbon)
 install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/carbon-weekly DESTINATION /etc/cron.weekly RENAME carbon)
 install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/carbon-monthly DESTINATION /etc/cron.monthly RENAME carbon)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/org.craigd.pkexec.carbon.policy DESTINATION /usr/share/polkit-1/actions)
