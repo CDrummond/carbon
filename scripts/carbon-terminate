@@ -1,0 +1,18 @@
+#!/bin/bash
+
+ppid=$1
+
+if [ -z $ppid ] ; then
+   echo "Termiante PID and all its children"
+   echo "Usage: $0 PID";
+   exit;
+fi
+
+for i in `ps -eaf | awk '$3 == '$ppid' { print $2 }'` ; do
+    $0 $i "child"
+    kill -9 $i
+done
+
+if [ "$2" = "" ] ; then
+    kill $ppid
+fi
