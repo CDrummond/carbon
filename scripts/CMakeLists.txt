@@ -1,11 +1,1 @@
 configure_file (carbon-runner.cmake ${CMAKE_CURRENT_BINARY_DIR}/carbon-runner @ONLY)
-
-set (CARBON_ANACRON_PERIOD "daily")
-configure_file (carbon-anacron.cmake ${CMAKE_CURRENT_BINARY_DIR}/carbon-daily @ONLY)
-set (CARBON_ANACRON_PERIOD "weekly")
-configure_file (carbon-anacron.cmake ${CMAKE_CURRENT_BINARY_DIR}/carbon-weekly @ONLY)
-set (CARBON_ANACRON_PERIOD "monthly")
-configure_file (carbon-anacron.cmake ${CMAKE_CURRENT_BINARY_DIR}/carbon-monthly @ONLY)
-install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/carbon-daily DESTINATION /etc/cron.daily RENAME carbon)
-install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/carbon-weekly DESTINATION /etc/cron.weekly RENAME carbon)
-install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/carbon-monthly DESTINATION /etc/cron.monthly RENAME carbon)
