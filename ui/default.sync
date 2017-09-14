@@ -1,7 +1,3 @@
-[Schedule]
-cronStr=0_0_/_/_/
-scheduleType=none
-
 [Settings]
 archive=true
 recursive=true

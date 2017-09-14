@@ -34,9 +34,6 @@
 #include <QSettings>
 #include <QHeaderView>
 #include <QFileInfo>
-#include "cthost.h"
-#include "ctcron.h"
-#include "ctInitializationError.h"
 
 #define CFG_GROUP     "SessionWidget/"
 #define CFG_COL_SIZES CFG_GROUP "List"
@@ -73,7 +70,6 @@ enum EColumns {
     COL_NAME,
     COL_TYPE,
     COL_LAST_RUN,
-    COL_SCHED,
 
     NUM_COLS
 };
@@ -101,12 +97,6 @@ public:
         setText(COL_NAME, session->name());
         setText(COL_TYPE, typeStr(session->makeBackupsFlag()));
         setText(COL_LAST_RUN, session->last().isEmpty() ? QObject::tr("Never") : session->last());
-        setText(COL_SCHED, session->scheduleStr());
-        setToolTip();
-    }
-
-    void setSchedule(const QString &str) {
-        setText(COL_SCHED, str);
         setToolTip();
     }
 
@@ -169,8 +159,6 @@ SessionWidget::SessionWidget(QWidget *parent)
     , menu(0L) {
     setupUi(this);
     setupWidgets();
-    initCronTab();
-
     QTimer::singleShot(0, this, SLOT(loadSessions()));
 }
 
@@ -213,36 +201,13 @@ void SessionWidget::newSession() {
 
     if (sessionDialog->run(defSession, false)) {
         Session *session = new Session;
-        CTCron   *cron = ctHost->findCurrentUserCron();
-        CTTask   *sched = new CTTask("", "", cron->userLogin(), cron->isMultiUserCron());
-        bool     addedSched(false);
 
-        sessionDialog->get(*session, sched);
+        sessionDialog->get(*session);
 
         SessionWidgetItem *item = new SessionWidgetItem(sessions, session);
 
-        if (*item) {
-            if (Session::CronSchedule == session->schedType()) {
-                addedSched = true;
-                item->sessionData().setSched(sched);
-                item->setSchedule(item->sessionData().scheduleStr());
-            }
-        } else {
+        if (!*item) {
             delete item;
-        }
-
-        if (addedSched) {
-            cron->addTask(sched);
-
-            CTSaveStatus st(ctHost->save());
-
-            if (st.isError()) {
-                MessageBox::error(this, tr("<p><b>Failed to save advanced schedule data</b></p><p>%1</p>")
-                                  .arg(st.detailErrorMessage()));
-                item->sessionData().setSchedType(Session::NoSchedule);
-            }
-        } else {
-            delete sched;
         }
 
         controlButtons();
@@ -259,38 +224,7 @@ void SessionWidget::editSession() {
         SessionWidgetItem *session = (SessionWidgetItem *)sessionList.at(0);
 
         if (sessionDialog->run(session->sessionData(), true)) {
-            CTCron *cron = ctHost->findCurrentUserCron();
-            CTTask *prevSched = session->sessionData().sched(),
-                    *sched = prevSched
-                             ? prevSched
-                             : new CTTask("", "", cron->userLogin(), cron->isMultiUserCron());
-
-            sessionDialog->get(session->sessionData(), sched);
-
-            bool isCron(Session::CronSchedule == session->sessionData().schedType()),
-                 saveCron(false);
-
-            if (prevSched && !isCron) {
-                session->sessionData().setSched(0L);
-                cron->removeTask(prevSched);
-                saveCron = true;
-            } else if (!prevSched && isCron) {
-                session->sessionData().setSched(sched);
-                cron->addTask(sched);
-                saveCron = true;
-
-            }
-
-            if (saveCron) {
-                CTSaveStatus st(ctHost->save());
-
-                if (st.isError()) {
-                    MessageBox::error(this, tr("<p><b>Failed to save advanced schedule data</b></p><p>%1</p>")
-                                      .arg(st.detailErrorMessage()));
-                    if (isCron)
-                        session->sessionData().setSchedType(Session::NoSchedule);
-                }
-            }
+            sessionDialog->get(session->sessionData());
             session->sessionData().save();
             session->update();
         }
@@ -305,24 +239,12 @@ void SessionWidget::removeSession() {
             (sessionList.count() > 1 && QMessageBox::Yes == MessageBox::warningYesNoList(this, tr("Delete the following sessions?"), names))) {
         QList<QTreeWidgetItem *>::Iterator it(sessionList.begin());
         QList<QTreeWidgetItem *>::Iterator end(sessionList.end());
-        CTCron *cron = ctHost->findCurrentUserCron();
-        bool modifiedCron(false);
 
         for (; it != end; ++it) {
             SessionWidgetItem *item = (SessionWidgetItem *)(*it);
-
-            if (item->sessionData().sched()) {
-                cron->removeTask(item->sessionData().sched());
-                delete item->sessionData().sched();
-                item->sessionData().setSchedType(Session::NoSchedule);
-                modifiedCron = true;
-            }
             item->remove();
         }
 
-        if (modifiedCron) {
-            ctHost->save();
-        }
         controlButtons();
         controlSyncButtons();
     }
@@ -365,17 +287,7 @@ void SessionWidget::controlButtons() {
 }
 
 void SessionWidget::setAsDefaults() {
-    CTTask *prevSched = defSession.sched(),
-            *sched = prevSched
-                     ? prevSched
-                     : new CTTask("", "", "", false);
-
-    sessionDialog->get(defSession, sched);
-
-    if (prevSched || (!prevSched && Session::CronSchedule == defSession.schedType())) {
-        defSession.setSched(sched);
-    }
-
+    sessionDialog->get(defSession);
     defSession.save(QString());
 }
 
@@ -385,40 +297,13 @@ void SessionWidget::controlSyncButtons() {
 
 void SessionWidget::loadSessions() {
     QFileInfoList sessionList = QDir(Utils::dataDir(QString(), true)).entryInfoList(QStringList() << "*" CARBON_EXTENSION, QDir::NoDotAndDotDot | QDir::Files);
-    QMap<QString, CTTask *> taskMap;
-    QList<CTTask *> tasks(ctHost->findCurrentUserCron()->tasks());
     int pos;
     int srlen(strlen(CARBON_RUNNER));
-    bool haveSessions(false);
-
-    foreach (CTTask *task, tasks) {
-        if (-1 != (pos = task->command.indexOf(QLatin1String(CARBON_RUNNER)))) {
-            QString name(task->command.mid(pos + srlen + 1).trimmed());
-
-            if (name.length() && name[0] == QChar('\'') && name[name.length() - 1] == QChar('\'')) {
-                name = name.mid(1, name.length() - 2).replace(QLatin1String("'\\''"), QLatin1String("\'")).trimmed();
-            }
-
-            taskMap[name] = task;
-        }
-    }
-
-    QMap<QString, CTTask *>::Iterator mapEnd(taskMap.end());
 
     foreach (const QFileInfo &session, sessionList) {
         SessionWidgetItem *item = new SessionWidgetItem(sessions, session.absoluteFilePath());
 
-        if (*item) {
-            QMap<QString, CTTask *>::Iterator mapIt = taskMap.find(item->text(COL_NAME));
-
-            if (mapIt != mapEnd) {
-                item->sessionData().setSched(*mapIt);
-                item->sessionData().setSchedType(Session::CronSchedule);
-                item->setSchedule(item->sessionData().scheduleStr());
-            }
-
-            haveSessions = true;
-        } else {
+        if (!*item) {
             delete item;
         }
     }
@@ -480,31 +365,6 @@ void SessionWidget::doSessions(bool dryRun) {
                 }
             }
         }
-    }
-}
-
-void SessionWidget::initCronTab() {
-    QString exe(Utils::findExe("crontab"));
-
-    if (exe.isEmpty()) {
-        MessageBox::error(this, tr("<p><b>Synchronisation Scheduling Disabled</b></p>"
-                                   "<p>Synkronise uses <i>cron</i> to schedule synchronisations. The"
-                                   " <i>crontab</i> program (which is used to edit <i>cron</i> files) "
-                                   " has not been found on your system. Please install the relevant packages</p>"));
-        ctHost = 0;
-    } else {
-        CTInitializationError ctInitializationError;
-
-        ctHost = new CTHost(exe, ctInitializationError);
-        if (ctInitializationError.hasErrorMessage()) {
-            MessageBox::error(this, tr("<p><b>Synchronisation Scheduling Disabled</b></p><p>%1</p>").arg(ctInitializationError.errorMessage()));
-            delete ctHost;
-            ctHost = 0;
-        }
-    }
-
-    if (0 == ctHost) {
-        sessions->hideColumn(2);
     }
 }
 

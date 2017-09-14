@@ -24,23 +24,11 @@
 
 #include <QString>
 #include <QLatin1String>
-#include "cttask.h"
 #include "excludefile.h"
 #include "config.h"
 
 class Session {
 public:
-
-    enum ESchedule {
-        NoSchedule,
-        DailySchedule,
-        WeeklySchedule,
-        MonthlySchedule,
-        CronSchedule,
-
-        NumScheduleTypes
-    };
-
     Session(const QString &name, bool def = false);
     Session();
     ~Session();
@@ -90,22 +78,8 @@ public:
     const QString & customOpts() const                        {
         return customOptions;
     }
-    CTTask *        sched() const                             {
-        return schedule;
-    }
     ExcludeFile *   excludeFile() const                       {
         return exclude;
-    }
-    void            setSched(CTTask *sched);
-    QString         scheduleStr() const                       {
-        return schedule ? schedule->describe() : scheduleStr(scheduleType);
-    }
-    static QString  scheduleStr(ESchedule type);
-    ESchedule       schedType() const                         {
-        return scheduleType;
-    }
-    const QString & crontabStr() const                        {
-        return cronStr;
     }
     void            setName(const QString &v);
     void            setDir(const QString &v)                  {
@@ -253,17 +227,11 @@ public:
     void            setMaxSize(int v)                         {
         maxFileSize = v;
     }
-    void            setSchedType(ESchedule v);
 
 private:
     Session(const Session &o);
 
     bool            removeFiles();
-    QString         simpleScheduleLinkDir() const;
-    QString         simpleScheduleLink() const;
-    bool            simpleScheduleLinkExists() const;
-    void            addSimpleSchedule() const;
-    void            removeSimpleSchedule() const;
 
 private:
     bool isDef;
@@ -296,9 +264,6 @@ private:
     int maxFileSize;
     ExcludeFile *exclude;
     QString customOptions;
-    QString cronStr;
-    CTTask *schedule; // DO NOT new/delete this - it is controlled externally!
-    ESchedule scheduleType;
 };
 
 #endif

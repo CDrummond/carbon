@@ -23,7 +23,6 @@
 #include "sessiondialog.h"
 #include "sessionwidget.h"
 #include "generaloptionswidget.h"
-#include "syncschedulewidget.h"
 #include "excludewidget.h"
 #include "rsyncoptionswidget.h"
 #include "mainwindow.h"
@@ -40,13 +39,11 @@ SessionDialog::SessionDialog(QWidget *parent)
     setButtonText(User2, tr("Show RSync Manual"));
 
     generalOptions = new GeneralOptionsWidget(0);
-    syncScheduleWidget = new SyncScheduleWidget(0);
     excludeWidget = new ExcludeWidget(0);
     rSyncOptionsWidget = new RSyncOptionsWidget(0);
 
     generalPage = pageWidget->addPage(generalOptions, tr("General Options"), QIcon::fromTheme("folder"), tr("Basic Synchronisation Session Options"));
     excludePage = pageWidget->addPage(excludeWidget, tr("Exclusions"), QIcon::fromTheme("edit-delete"), tr("Exclude Files And Folders From Synchronisation"));
-    syncSchedulePage = pageWidget->addPage(syncScheduleWidget, tr("Schedule"), QIcon::fromTheme("clock"), tr("Synchronisation Scheduling"));
     rSyncOptionsPage = pageWidget->addPage(rSyncOptionsWidget, tr("Backend Options"), MainWindow::appIcon, tr("RSync Backend Options"));
     setMainWidget(pageWidget);
 }
@@ -56,7 +53,6 @@ bool SessionDialog::run(Session &session, bool edit) {
     origSrcPath = edit ? session.source() : QString();
     setCaption(edit ? tr("Edit Session") : tr("Create New Session"));
     generalOptions->set(session, edit);
-    syncScheduleWidget->set(session);
     excludeWidget->set(session);
     rSyncOptionsWidget->set(session);
     pageWidget->setCurrentPage(generalPage);
@@ -104,9 +100,6 @@ MessageBox::error(this, tr("Remote URLs require user and host."));
             pageWidget->setCurrentPage(generalPage);
             MessageBox::error(this, tr("A session with source <b>%1</b> already exists.<br/>"
                                        "Please choose a different path.").arg(newSrc));
-        } else if (syncScheduleWidget->cronScheduled() && !syncScheduleWidget->cronValid()) {
-            pageWidget->setCurrentPage(syncSchedulePage);
-            MessageBox::error(this, tr("<p>The entered schedule is invalid!</p>"));
         } else if (-1 != rSyncOptionsWidget->getCustom().indexOf("--out-format") ||
                    -1 != rSyncOptionsWidget->getCustom().indexOf("--backup-dir")) {
             pageWidget->setCurrentPage(rSyncOptionsPage);
@@ -134,9 +127,8 @@ MessageBox::error(this, tr("Remote URLs require user and host."));
     }
 }
 
-void SessionDialog::get(Session &session, CTTask *sched) {
+void SessionDialog::get(Session &session) {
     excludeWidget->get(session);
     rSyncOptionsWidget->get(session);
     generalOptions->get(session);
-    syncScheduleWidget->get(session, sched);
 }

@@ -30,7 +30,6 @@ class QMenu;
 class SessionDialog;
 class RunnerDialog;
 class CLogViewer;
-class CTHost;
 class QIcon;
 
 class SessionWidget : public QWidget, Ui::SessionWidget {
@@ -74,7 +73,6 @@ private:
     void controlSyncButtons();
     void setupWidgets();
     void doSessions(bool dryRun);
-    void initCronTab();
     void createSessionDialog();
     QList<QTreeWidgetItem *> selectedSessions();
 
@@ -83,7 +81,6 @@ private:
     SessionDialog *sessionDialog;
     RunnerDialog  *runnerDialog;
     CLogViewer    *logViewer;
-    CTHost        *ctHost;
     QMenu         *menu;
 };
 

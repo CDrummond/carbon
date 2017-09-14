@@ -32,47 +32,19 @@
 #define CFG_READ_BOOL(V, DEF)      V=entries.contains(#V) ? QLatin1String("true")==entries[#V] : DEF
 #define CFG_READ_INT(V, DEF)       V=entries.contains(#V) ? entries[#V].toInt() : DEF
 #define CFG_READ_STR(V, DEF)       V=entries.contains(#V) ? entries[#V] : DEF
-#define CFG_READ_SCHEDTYPE(V, DEF) V=entries.contains(#V) ? toSchedule(entries[#V]) : DEF
 #define CFG_READ_STRING(V, DEF)    V=entries.contains(#V) ? entries[#V] : DEF
 
 #define CFG_WRITE_INT(V)       out << #V << "=" << V << endl
 #define CFG_WRITE_BOOL(V)      out << #V << "=" << (V ? "true" : "false") << endl
 #define CFG_WRITE_STR(V)       out << #V << "=" << V << endl
-#define CFG_WRITE_SCHEDTYPE(V) out << #V << "=" << toStr(V) << endl
 
 static QString getName(const QString &f) {
     return QFileInfo(f).fileName().remove(CARBON_EXTENSION);
 }
 
-static QString toStr(Session::ESchedule t) {
-    switch (t) {
-    case Session::NoSchedule:
-        return QLatin1String("none");
-    default:
-    case Session::DailySchedule:
-        return QLatin1String("daily");
-    case Session::WeeklySchedule:
-        return QLatin1String("weekly");
-    case Session::MonthlySchedule:
-        return QLatin1String("monthly");
-    case Session::CronSchedule:
-        return QLatin1String("cron");
-    }
-}
-
-static Session::ESchedule toSchedule(const QString &str) {
-    for (int i = 0; i < Session::NumScheduleTypes; ++i) {
-        if (toStr((Session::ESchedule)i) == str) {
-            return (Session::ESchedule)i;
-        }
-    }
-    return Session::DailySchedule;
-}
-
 Session::Session(const QString &file, bool def)
     : isDef(def)
-    , exclude(0)
-    , schedule(0L) {
+    , exclude(0) {
     if (isDef) {
         dirName = Utils::configDir(QString(), true);
         sessionName = QLatin1String("default");
@@ -140,9 +112,6 @@ Session::Session(const QString &file, bool def)
         copySymlinksAsSymlinks = preservePermissions = preserveSpecialFiles = preserveOwner =
                                      preserveGroup = true;
     }
-    if (!cronStr.isEmpty()) {
-        cronStr = cronStr.replace('_', ' ').replace('/', '*');
-    }
     if (maxBackupAge > 365) {
         maxBackupAge = 365;
     } else if (maxBackupAge < 0) {
@@ -169,20 +138,12 @@ Session::Session(const QString &file, bool def)
         }
     }
 
-    CFG_READ_SCHEDTYPE(scheduleType, NoSchedule);
-    CFG_READ_STRING(cronStr, QString("0_0_/_/_/"));
-
-    if (!isDef && CronSchedule != scheduleType && NoSchedule != scheduleType && !simpleScheduleLinkExists()) {
-        scheduleType = NoSchedule;
-    }
-
     updateLast();
 }
 
 Session::Session()
     : isDef(false)
-    , exclude(0L)
-    , schedule(0L) {
+    , exclude(0L) {
 }
 
 Session::~Session() {
@@ -212,15 +173,6 @@ bool Session::save(const QString &name) {
 
     QTextStream out(&f);
 
-    out << "[Schedule]" << endl;
-    QString temp = cronStr;
-    if (!temp.isEmpty()) {
-        temp.replace(' ', '_').replace('*', '/');
-    }
-    out << "cronStr=" << temp << endl;
-    CFG_WRITE_SCHEDTYPE(scheduleType);
-    out << endl;
-
     out << "[Settings]" << endl;
     CFG_WRITE_STR(src);
     CFG_WRITE_STR(dest);
@@ -247,7 +199,7 @@ bool Session::save(const QString &name) {
     CFG_WRITE_INT(maxBackupAge);
     CFG_WRITE_INT(maxFileSize);
 
-    temp = customOptions;
+    QString temp = customOptions;
     if (!temp.isEmpty()) {
         temp = QChar('\"') + temp.replace('\"', "\\\"").replace('\'', "\\\'") + QChar('\"');
     }
@@ -302,49 +254,6 @@ void Session::setExcludePatterns(const ExcludeFile::PatternList &list) {
     exclude->setPatterns(list);
 }
 
-void Session::setSched(CTTask *sched) {
-    schedule = sched;
-
-    if (schedule) {
-        schedule->comment = QObject::tr("Session: %1").arg(sessionName);
-        QString quotedName = sessionName;
-        quotedName = quotedName.replace("\"", "\\\"");
-        schedule->command = QLatin1String(CARBON_RUNNER) + QLatin1String(" \"") + quotedName + QLatin1String("\"");
-        cronStr = schedule->schedulingCronFormat();
-    }
-}
-
-void Session::setSchedType(ESchedule v) {
-    if (scheduleType != v) {
-        if (CronSchedule != v) {
-            setSched(0L);
-        }
-        if (NoSchedule != scheduleType) {
-            removeSimpleSchedule();
-        }
-        scheduleType = v;
-        if (NoSchedule != scheduleType) {
-            addSimpleSchedule();
-        }
-    }
-}
-
-QString Session::scheduleStr(ESchedule type) {
-    switch (type) {
-    case NoSchedule:
-        return QObject::tr("Not Scheduled");
-    default:
-    case DailySchedule:
-        return QObject::tr("Scheduled Daily");
-    case WeeklySchedule:
-        return QObject::tr("Scheduled Weekly");
-    case MonthlySchedule:
-        return QObject::tr("Scheduled Monthly");
-    case CronSchedule:
-        return QObject::tr("Advanced Schedule");
-    }
-}
-
 static bool removeFile(const QString &file) {
     return file.isEmpty() || !QFile::exists(file) || QFile::remove(file);
 }
@@ -356,33 +265,8 @@ bool Session::removeLockFile() {
 bool Session::removeFiles() {
     if (removeFile(logFileName()) && removeFile(infoFileName()) && removeFile(lockFileName()) &&
             (!exclude || exclude->erase()) && removeFile(fileName())) {
-        removeSimpleSchedule();
         return true;
     }
 
     return false;
-}
-
-QString Session::simpleScheduleLinkDir() const {
-    return Utils::dataDir(toStr(scheduleType), true);
-}
-
-QString Session::simpleScheduleLink() const {
-    return simpleScheduleLinkDir() + sessionName + QLatin1String(CARBON_EXTENSION);
-}
-
-bool Session::simpleScheduleLinkExists() const {
-    return !QFile::symLinkTarget(simpleScheduleLink()).isEmpty();
-}
-
-void Session::addSimpleSchedule() const {
-    if (CronSchedule != scheduleType && NoSchedule != scheduleType) {
-        QFile::link(fileName(), simpleScheduleLink());
-    }
-}
-
-void Session::removeSimpleSchedule() const {
-    if (CronSchedule != scheduleType && NoSchedule != scheduleType) {
-        ::unlink(QFile::encodeName(simpleScheduleLink()).constData());
-    }
 }

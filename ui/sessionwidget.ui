@@ -33,11 +33,6 @@
        <string>Last Sync</string>
       </property>
      </column>
-     <column>
-      <property name="text" >
-       <string>Schedule</string>
-      </property>
-     </column>
     </widget>
    </item>
   </layout>

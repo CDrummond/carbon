@@ -26,10 +26,8 @@
 
 class Session;
 class GeneralOptionsWidget;
-class SyncScheduleWidget;
 class ExcludeWidget;
 class RSyncOptionsWidget;
-class CTTask;
 class PageWidget;
 class PageWidgetItem;
 
@@ -41,7 +39,7 @@ public:
 
     bool run(Session &session, bool edit);
     void slotButtonClicked(int btn);
-    void get(Session &session, CTTask *sched);
+    void get(Session &session);
     void getRSyncDefaults(Session &session);
     void getExcludeDefaults(Session &session);
 
@@ -53,11 +51,9 @@ private:
     QString origName;
     QString origSrcPath;
     GeneralOptionsWidget *generalOptions;
-    SyncScheduleWidget *syncScheduleWidget;
     ExcludeWidget *excludeWidget;
     RSyncOptionsWidget *rSyncOptionsWidget;
     PageWidgetItem *generalPage;
-    PageWidgetItem *syncSchedulePage;
     PageWidgetItem *excludePage;
     PageWidgetItem *rSyncOptionsPage;
 };

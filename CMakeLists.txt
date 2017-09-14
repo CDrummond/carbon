@@ -56,7 +56,6 @@ endif ()
 configure_file(config.h.cmake ${CMAKE_BINARY_DIR}/config.h)
 
 add_subdirectory(support)
-add_subdirectory(crontab)
 add_subdirectory(ui)
 add_subdirectory(scripts)
 add_subdirectory(icons)
