@@ -8,12 +8,6 @@ Advanced:
 Extra:
   Execute command before rsync: [......] Halt on failure [x]
   Execute command afger rsync: [.....] On rsync error only [x]
-  Run as root (use pkexec to call carbon-runner)
-  -- will also need to use pkexec to call carbon-terminate
-  -- need to set owner of lock, log, and info files.
-    -- perhaps pass --owner=UID --group=GID to carbon-runner ?
-       script then needs to create lock, log, info first,
-       and then set ownership. This way if crash we are safe!
 
 * SessionDialog
   Add NOTES detailing URLs
